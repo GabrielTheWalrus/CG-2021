@@ -4,7 +4,7 @@
 Gabriel Bellomi Meale - 11091915
 
 ## Descrição
-A aplicação consiste no clássico jogo PONG. Duas raquetes se movimentam pelo eixo Y (uma ao lado esquerdo da tela e outro do lado direito) rebatendo uma bola de uma lado para o outro. A primeira raquete que não conseguir bater leva um "GOL" para o adversário e, quando a somatória de um dos jogadores for de 5 gols, o jogo acaba e recomeça.
+A aplicação consiste no clássico jogo PONG. Duas raquetes se movimentam pelo eixo Y (uma ao lado esquerdo da tela e outro do lado direito) rebatendo uma bola de uma lado para o outro. A primeira raquete que não conseguir bater leva um "GOL", somando um ponto para o adversário e, quando a somatória de um dos jogadores for de 5 gols, o jogo acaba e recomeça.
 
 ## Movimentação
 

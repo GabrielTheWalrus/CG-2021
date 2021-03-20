@@ -5,42 +5,36 @@
 #include "abcg.hpp"
 
 void OpenGLWindow::handleEvent(SDL_Event &event) {
-  // Keyboard events
 
   if (event.type == SDL_KEYDOWN) {
-    //m_ballState.set(BallState::Playing);
-    if (event.key.keysym.sym == SDLK_w && m_raquete.m_translation.y < 0.8f){
-      
+    if (event.key.keysym.sym == SDLK_w && m_raquete.m_translation.y < 0.8f){      
       m_gameData.m_input.set(static_cast<size_t>(Input::Up));
-      m_raquete.setTranslation(glm::vec2(m_raquete.m_translation.x, m_raquete.m_translation.y + (0.1)));
     }
     if (event.key.keysym.sym == SDLK_s && m_raquete.m_translation.y > -0.8f){
       m_gameData.m_input.set(static_cast<size_t>(Input::Down));
-      m_raquete.setTranslation(glm::vec2(m_raquete.m_translation.x, m_raquete.m_translation.y - (0.1)));
     }
-
     if (event.key.keysym.sym == SDLK_UP && m_raquete2.m_translation.y < 0.8f){
-      m_gameData.m_input.set(static_cast<size_t>(Input::Up));
-      m_raquete2.setTranslation(glm::vec2(m_raquete2.m_translation.x, m_raquete2.m_translation.y + (0.1)));
+      m_gameData.m_input.set(static_cast<size_t>(Input::UpR));
     }
     if (event.key.keysym.sym == SDLK_DOWN && m_raquete2.m_translation.y > -0.8f){
-      m_gameData.m_input.set(static_cast<size_t>(Input::Down));
-      m_raquete2.setTranslation(glm::vec2(m_raquete2.m_translation.x, m_raquete2.m_translation.y - (0.1)));
+      m_gameData.m_input.set(static_cast<size_t>(Input::DownR));
     }
   }
 
-  // if (event.type == SDL_KEYUP) {
-  //   if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
-  //     m_gameData.m_input.reset(static_cast<size_t>(Input::Up));
-  //   if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s)
-  //     m_gameData.m_input.reset(static_cast<size_t>(Input::Down));
-  // }
-
-  
+  if (event.type == SDL_KEYUP) {
+    if (event.key.keysym.sym == SDLK_w)
+      m_gameData.m_input.reset(static_cast<size_t>(Input::Up));
+    if (event.key.keysym.sym == SDLK_s)
+      m_gameData.m_input.reset(static_cast<size_t>(Input::Down));
+    if (event.key.keysym.sym == SDLK_UP)
+      m_gameData.m_input.reset(static_cast<size_t>(Input::UpR));
+    if (event.key.keysym.sym == SDLK_DOWN)
+      m_gameData.m_input.reset(static_cast<size_t>(Input::DownR));
+  }
 }
 
 void OpenGLWindow::initializeGL() {
-  // Load a new font
+
   ImGuiIO &io{ImGui::GetIO()};
   auto filename{getAssetsPath() + "Inconsolata-Medium.ttf"};
   m_font = io.Fonts->AddFontFromFileTTF(filename.c_str(), 60.0f);
@@ -48,7 +42,6 @@ void OpenGLWindow::initializeGL() {
     throw abcg::Exception{abcg::Exception::Runtime("Cannot load font file")};
   }
 
-  // Create program to render the stars
   m_raqueteProgram = createProgramFromFile(getAssetsPath() + "raquete.vert",
                                          getAssetsPath() + "raquete.frag");
   m_raqueteProgram2 = createProgramFromFile(getAssetsPath() + "raquete.vert",
@@ -60,10 +53,6 @@ void OpenGLWindow::initializeGL() {
 #if !defined(__EMSCRIPTEN__)
   glEnable(GL_PROGRAM_POINT_SIZE);
 #endif
-
-  // Start pseudo-random number generator
-  auto seed{std::chrono::steady_clock::now().time_since_epoch().count()};
-  m_randomEngine.seed(seed);
 
   restart();
 }
@@ -84,7 +73,6 @@ void OpenGLWindow::update() {
 
   float deltaTime{static_cast<float>(getDeltaTime())};
 
-  //Wait 5 seconds before restarting
   if (m_gameData.m_state == State::Player1Win &&
       m_restartWaitTimer.elapsed() > 5) {
     restart();
@@ -106,8 +94,19 @@ void OpenGLWindow::update() {
     checkWinCondition();
   }
 
-  m_raquete.update(m_gameData, deltaTime);
-  m_raquete2.update(m_gameData, deltaTime);
+  if (m_gameData.m_input[static_cast<size_t>(Input::Up)] && m_raquete.m_translation.y < 0.8f){
+    m_raquete.setTranslation(glm::vec2(m_raquete.m_translation.x, m_raquete.m_translation.y + (0.8 * deltaTime)));
+  }
+  if (m_gameData.m_input[static_cast<size_t>(Input::Down)] && m_raquete.m_translation.y > -0.8f){
+    m_raquete.setTranslation(glm::vec2(m_raquete.m_translation.x, m_raquete.m_translation.y - (0.8 * deltaTime)));
+  }
+  if (m_gameData.m_input[static_cast<size_t>(Input::UpR)] && m_raquete2.m_translation.y < 0.8f){
+    m_raquete2.setTranslation(glm::vec2(m_raquete2.m_translation.x, m_raquete2.m_translation.y + (0.8 * deltaTime)));
+  }
+  if (m_gameData.m_input[static_cast<size_t>(Input::DownR)] && m_raquete2.m_translation.y > -0.8f){
+    m_raquete2.setTranslation(glm::vec2(m_raquete2.m_translation.x, m_raquete2.m_translation.y - (0.8 * deltaTime)));
+  }
+
   m_bola.update(deltaTime, directionX, directionY);
   
 }
@@ -260,6 +259,5 @@ void OpenGLWindow::checkWinCondition() {
     }
     m_restartWaitTimer.restart();
   }
-
 
 }

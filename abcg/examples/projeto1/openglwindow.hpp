@@ -22,7 +22,6 @@ class OpenGLWindow : public abcg::OpenGLWindow {
   GLuint m_raqueteProgram{};
   GLuint m_raqueteProgram2{};
   GLuint m_bolaProgram{};
-  //GLuint m_objectsProgram{};
 
   int m_viewportWidth{};
   int m_viewportHeight{};
@@ -32,7 +31,6 @@ class OpenGLWindow : public abcg::OpenGLWindow {
   Raquete m_raquete;
   Raquete m_raquete2;
   Bola m_bola;
-  //Bola m_bola;
   int directionX = 1; //-1 esquerda 1 direita
   int directionY = 0;
   int player1Score = 0;
@@ -46,7 +44,6 @@ class OpenGLWindow : public abcg::OpenGLWindow {
 
   void checkCollisions();
   void checkWinCondition();
-  void checkGolCondition();
 
   void restart();
   void update();

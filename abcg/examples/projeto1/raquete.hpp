@@ -13,13 +13,11 @@ class Raquete {
   void paintGL(const GameData &gameData);
   void terminateGL();
 
-  void update(const GameData &gameData, float deltaTime);
   void setRotation(float rotation) { m_rotation = rotation; }
   void setTranslation(glm::vec2 translation) { m_translation = translation; }
 
 
  private:
-  //friend Bola;
   friend OpenGLWindow;
 
   GLuint m_program{};

@@ -28,9 +28,7 @@ void Bola::initializeGL(GLuint program) {
 
   // Normalize
   for (auto &position :positions) {
-    //position /= glm::vec2{15.5f, 15.5f};
     position /= glm::vec2{15.0f, 15.0f};
-    //position += 0.7;
   }
 
   std::array indices{0, 1, 2,
@@ -83,29 +81,8 @@ void Bola::paintGL(const GameData &gameData) {
   glUniform1f(m_rotationLoc, m_rotation);
   glUniform2fv(m_translationLoc, 1, &m_translation.x);
 
-  //glUniform2f(m_translationLoc, m_translation.x, m_translation.y);
-
-
-  // Restart thruster blink timer every 100 ms
-  if (m_bolaMoveTimer.elapsed() > 100.0 / 1000.0) m_bolaMoveTimer.restart();
-
-  if (gameData.m_input[static_cast<size_t>(Input::Up)]) {
-    // Show thruster trail during 50 ms
-    if (m_bolaMoveTimer.elapsed() < 50.0 / 1000.0) {
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-      // 50% transparent
-      glUniform4f(m_colorLoc, 1, 1, 1, 0.5f);
-
-      glDrawElements(GL_TRIANGLES, 14 * 3, GL_UNSIGNED_INT, nullptr);
-
-      glDisable(GL_BLEND);
-    }
-  }
-
   glUniform4fv(m_colorLoc, 1, &m_color.r);
-  glDrawElements(GL_TRIANGLES, 12 * 3, GL_UNSIGNED_INT, nullptr);
+  glDrawElements(GL_TRIANGLES, 2 * 3, GL_UNSIGNED_INT, nullptr);
 
   glBindVertexArray(0);
 
@@ -121,13 +98,9 @@ void Bola::terminateGL() {
 void Bola::update(float deltaTime, int &directionX, int &directionY) {
     
     if(directionX == 1){
-        //if (m_translation.x > -1.0f && m_translation.x < 1.0f) 
-        setTranslation(glm::vec2(m_translation.x + (deltaTime * (1.2f)), (m_translation.y + (deltaTime * (1.2f) * directionY))));
+      setTranslation(glm::vec2(m_translation.x + (deltaTime * (1.2f)), (m_translation.y + (deltaTime * (1.2f) * directionY))));
     }
     else if(directionX == -1){
-        //if (m_translation.x > -1.0f && m_translation.x < 1.0f) 
-        setTranslation(glm::vec2(m_translation.x - (deltaTime * (1.2f)), (m_translation.y + (deltaTime * (1.2f) * directionY))));
+      setTranslation(glm::vec2(m_translation.x - (deltaTime * (1.2f)), (m_translation.y + (deltaTime * (1.2f) * directionY))));
     }
-    //if (m_translation.y < -1.0f) setTranslation(glm::vec2(m_translation.x, m_translation.y + 0.01));
-    //if (m_translation.y > +1.0f) setTranslation(glm::vec2(m_translation.x, m_translation.y - 0.01));
 }

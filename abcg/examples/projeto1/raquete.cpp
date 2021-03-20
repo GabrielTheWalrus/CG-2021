@@ -25,7 +25,6 @@ void Raquete::initializeGL(GLuint program) {
 
   // Normalize
   for (auto &position :positions) {
-    //position /= glm::vec2{15.5f, 15.5f};
     position /= glm::vec2{100.0f, 100.0f};
     //position += 0.7;
   }
@@ -80,29 +79,8 @@ void Raquete::paintGL(const GameData &gameData) {
   glUniform1f(m_rotationLoc, m_rotation);
   glUniform2fv(m_translationLoc, 1, &m_translation.x);
 
-  //glUniform2f(m_translationLoc, m_translation.x, m_translation.y);
-
-
-  // Restart thruster blink timer every 100 ms
-  if (m_raqueteMoveTimer.elapsed() > 100.0 / 1000.0) m_raqueteMoveTimer.restart();
-
-  if (gameData.m_input[static_cast<size_t>(Input::Up)]) {
-    // Show thruster trail during 50 ms
-    if (m_raqueteMoveTimer.elapsed() < 50.0 / 1000.0) {
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-      // 50% transparent
-      glUniform4f(m_colorLoc, 1, 1, 1, 0.5f);
-
-      glDrawElements(GL_TRIANGLES, 14 * 3, GL_UNSIGNED_INT, nullptr);
-
-      glDisable(GL_BLEND);
-    }
-  }
-
   glUniform4fv(m_colorLoc, 1, &m_color.r);
-  glDrawElements(GL_TRIANGLES, 12 * 3, GL_UNSIGNED_INT, nullptr);
+  glDrawElements(GL_TRIANGLES, 2 * 3, GL_UNSIGNED_INT, nullptr);
 
   glBindVertexArray(0);
 
@@ -113,27 +91,4 @@ void Raquete::terminateGL() {
   glDeleteBuffers(1, &m_vbo);
   glDeleteBuffers(1, &m_ebo);
   glDeleteVertexArrays(1, &m_vao);
-}
-
-void Raquete::update(const GameData &gameData, float deltaTime) {
-  //Rotate
-//  if (gameData.m_input[static_cast<size_t>(Input::Left)])
-//     m_rotation = glm::wrapAngle(m_rotation + 4.0f * deltaTime);
-//   if (gameData.m_input[static_cast<size_t>(Input::Right)])
-//     m_rotation = glm::wrapAngle(m_rotation - 4.0f * deltaTime);
-
-//   // Apply thrust
-//   if (gameData.m_input[static_cast<size_t>(Input::Up)] &&
-//       gameData.m_state == State::Playing) {
-//     // Thrust in the forward vector
-//     glm::vec2 forward = glm::rotate(glm::vec2{0.0f, 1.0f}, m_rotation);
-//     m_velocity += forward * deltaTime;
-//   }
-
-  //Move
-  // if (gameData.m_input[static_cast<size_t>(Input::Up)]){
-  
-  //   m_translation += glm::vec2(1, 2);
-
-  // }
 }

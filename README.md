@@ -1,3 +1,25 @@
+# Projeto 2 - Computação Gráfica - Balada com carro
+
+## Autor
+Gabriel Bellomi Meale - 11091915
+
+## Descrição
+A aplicação consiste em um modelo de carro obtido na internet renderizado em uma sala, onde as cores ficam piscando constantemente e aleatoriamente, dando efeito de luz de balada. 
+
+## Movimentação
+
+A movimentação é semelhante a do projeto look at (inclusive foi totalmente reaproveitada).
+
+## Código Fonte
+
+O código fonte está dentro da pasta Examples, dentro do diretório ABC, como "Projeto 2".
+
+## Link github pages
+
+https://gabrielthewalrus.github.io/BALADA/
+
+Novamente, tive problemas na publicação no github pages, porém na pasta do public (do repositório original) está funcional o arquivo do carro na balada.
+
 # Projeto 1 - Computação Gráfica - PONG
 
 ## Autor

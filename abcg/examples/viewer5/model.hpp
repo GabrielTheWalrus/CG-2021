@@ -9,6 +9,7 @@ struct Vertex {
   glm::vec3 position{};
   glm::vec3 normal{};
   glm::vec2 texCoord{};
+  glm::vec4 tangent{};
 
   bool operator==(const Vertex& other) const noexcept {
     static const auto epsilon{std::numeric_limits<float>::epsilon()};
@@ -29,10 +30,10 @@ class Model {
   Model& operator=(Model&&) = default;
 
   void loadDiffuseTexture(std::string_view path);
+  void loadNormalTexture(std::string_view path);
   void loadFromFile(std::string_view path, bool standardize = true);
   void render(int numTriangles = -1) const;
   void setupVAO(GLuint program);
-  void loadNormalTexture(std::string_view path);
 
   [[nodiscard]] int getNumTriangles() const {
     return static_cast<int>(m_indices.size()) / 3;
@@ -50,8 +51,6 @@ class Model {
   GLuint m_VBO{};
   GLuint m_EBO{};
 
-  
-
   glm::vec4 m_Ka;
   glm::vec4 m_Kd;
   glm::vec4 m_Ks;
@@ -66,6 +65,7 @@ class Model {
   bool m_hasTexCoords{false};
 
   void computeNormals();
+  void computeTangents();
   void createBuffers();
   void standardize();
 };

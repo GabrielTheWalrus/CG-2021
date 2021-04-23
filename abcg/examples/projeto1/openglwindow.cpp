@@ -44,8 +44,10 @@ void OpenGLWindow::initializeGL() {
 
   m_raqueteProgram = createProgramFromFile(getAssetsPath() + "raquete.vert",
                                          getAssetsPath() + "raquete.frag");
+                                         
   m_raqueteProgram2 = createProgramFromFile(getAssetsPath() + "raquete.vert",
                                          getAssetsPath() + "raquete.frag");
+                                         
   m_bolaProgram = createProgramFromFile(getAssetsPath() + "raquete.vert",
                                          getAssetsPath() + "raquete.frag");
   glClearColor(0, 0, 0, 1);

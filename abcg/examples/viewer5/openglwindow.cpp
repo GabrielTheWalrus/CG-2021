@@ -43,11 +43,10 @@ void OpenGLWindow::initializeGL() {
 
   // Create programs
   auto path{getAssetsPath() + "shaders/normalmapping"};
-  auto program{createProgramFromFile(path + ".vert", path + ".frag")};
-  m_programs.push_back(program);
+  m_program = createProgramFromFile(path + ".vert", path + ".frag");
   
-
   // Load default model
+  
   loadModel(getAssetsPath() + "bola.obj");
   m_mappingMode = 2;  // "From mesh" option
 
@@ -57,10 +56,10 @@ void OpenGLWindow::initializeGL() {
 }
 
 void OpenGLWindow::loadModel(std::string_view path) {
-  m_model.loadDiffuseTexture(getAssetsPath() + "maps/pattern.png");
-  m_model.loadNormalTexture(getAssetsPath() + "maps/pattern_normal.png");
+  m_model.loadDiffuseTexture(getAssetsPath() + "maps/jabulani.jpg");
+  //m_model.loadNormalTexture(getAssetsPath() + "maps/jabulani.jpg");
   m_model.loadFromFile(path);
-  m_model.setupVAO(m_programs.at(m_currentProgramIndex));
+  m_model.setupVAO(m_program);
   m_trianglesToDraw = m_model.getNumTriangles();
   
 
@@ -78,25 +77,25 @@ void OpenGLWindow::paintGL() {
   glViewport(0, 0, m_viewportWidth, m_viewportHeight);
 
   // Use currently selected program
-  const auto program{m_programs.at(m_currentProgramIndex)};
-  glUseProgram(program);
+  //const auto program{m_programs.at(m_currentProgramIndex)};
+  glUseProgram(m_program);
 
   // Get location of uniform variables
-  GLint viewMatrixLoc{glGetUniformLocation(program, "viewMatrix")};
-  GLint projMatrixLoc{glGetUniformLocation(program, "projMatrix")};
-  GLint modelMatrixLoc{glGetUniformLocation(program, "modelMatrix")};
-  GLint normalMatrixLoc{glGetUniformLocation(program, "normalMatrix")};
-  GLint lightDirLoc{glGetUniformLocation(program, "lightDirWorldSpace")};
-  GLint shininessLoc{glGetUniformLocation(program, "shininess")};
-  GLint IaLoc{glGetUniformLocation(program, "Ia")};
-  GLint IdLoc{glGetUniformLocation(program, "Id")};
-  GLint IsLoc{glGetUniformLocation(program, "Is")};
-  GLint KaLoc{glGetUniformLocation(program, "Ka")};
-  GLint KdLoc{glGetUniformLocation(program, "Kd")};
-  GLint KsLoc{glGetUniformLocation(program, "Ks")};
-  GLint diffuseTexLoc{glGetUniformLocation(program, "diffuseTex")};
-  GLint normalTexLoc{glGetUniformLocation(program, "normalTex")};
-  GLint mappingModeLoc{glGetUniformLocation(program, "mappingMode")};
+  GLint viewMatrixLoc{glGetUniformLocation(m_program, "viewMatrix")};
+  GLint projMatrixLoc{glGetUniformLocation(m_program, "projMatrix")};
+  GLint modelMatrixLoc{glGetUniformLocation(m_program, "modelMatrix")};
+  GLint normalMatrixLoc{glGetUniformLocation(m_program, "normalMatrix")};
+  GLint lightDirLoc{glGetUniformLocation(m_program, "lightDirWorldSpace")};
+  GLint shininessLoc{glGetUniformLocation(m_program, "shininess")};
+  GLint IaLoc{glGetUniformLocation(m_program, "Ia")};
+  GLint IdLoc{glGetUniformLocation(m_program, "Id")};
+  GLint IsLoc{glGetUniformLocation(m_program, "Is")};
+  GLint KaLoc{glGetUniformLocation(m_program, "Ka")};
+  GLint KdLoc{glGetUniformLocation(m_program, "Kd")};
+  GLint KsLoc{glGetUniformLocation(m_program, "Ks")};
+  GLint diffuseTexLoc{glGetUniformLocation(m_program, "diffuseTex")};
+  GLint normalTexLoc{glGetUniformLocation(m_program, "normalTex")};
+  GLint mappingModeLoc{glGetUniformLocation(m_program, "mappingMode")};
 
   // Set uniform variables used by every scene object
   glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, &m_viewMatrix[0][0]);
@@ -137,7 +136,7 @@ void OpenGLWindow::paintGL() {
               static_cast<float>(m_viewportHeight)};
    
   m_projMatrix =
-      glm::ortho(-1.0f * aspect, 1.0f * aspect, -1.0f, 1.0f, 0.1f, 5.0f);
+      glm::perspective(glm::radians(45.0f), aspect, 0.1f, 5.0f);
 
   glUseProgram(0);
   
@@ -156,9 +155,8 @@ void OpenGLWindow::resizeGL(int width, int height) {
 }
 
 void OpenGLWindow::terminateGL() {
-  for (const auto& program : m_programs) {
-    glDeleteProgram(program);
-  }
+  glDeleteProgram(m_program);
+  
 }
 
 void OpenGLWindow::update() {

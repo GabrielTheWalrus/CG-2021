@@ -21,6 +21,7 @@ class OpenGLWindow : public abcg::OpenGLWindow {
   int m_viewportHeight{};
 
   Model m_model;
+
   int m_trianglesToDraw{};
 
   TrackBall m_trackBallModel;
@@ -35,7 +36,7 @@ class OpenGLWindow : public abcg::OpenGLWindow {
   std::vector<const char*> m_shaderNames{
       "normalmapping", "texture", "blinnphong", "phong",
       "gouraud",       "normal",  "depth"};
-  std::vector<GLuint> m_programs;
+  GLuint m_program;
   int m_currentProgramIndex{};
 
   // Mapping mode

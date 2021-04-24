@@ -1,20 +1,34 @@
 #include "bola.hpp"
+#include <glm/gtc/matrix_inverse.hpp>
 
-void Bola::initializeGL(GLuint program) {
+void Bola::initializeGL(GLuint program, std::string assetsPath) {
 
   m_program = program;
-  // Load default model
-  loadModel(getAssetsPath() + "bola.obj");
-  m_mappingMode = 2;  // "From mesh" option
+
+  modelMatrixLoc = glGetUniformLocation(m_program, "modelMatrix");
+  viewMatrixLoc = glGetUniformLocation(m_program, "viewMatrix");
+  normalMatrixLoc = glGetUniformLocation(m_program, "normalMatrix");
+  shininessLoc = glGetUniformLocation(m_program, "shininess");
+  mappingModeLoc = glGetUniformLocation(m_program, "mappingMode");
+  
+  KaLoc = glGetUniformLocation(m_program, "Ka");
+  KdLoc = glGetUniformLocation(m_program, "Kd");
+  KsLoc = glGetUniformLocation(m_program, "Ks");
+
+  loadModel(assetsPath);
+  //m_mappingMode = 2;  // "From mesh" option
+
 }
 
-void Bola::paintGL() {
+void Bola::paintGL(glm::mat4 viewMatrix) {
 
-  GLint shininessLoc{glGetUniformLocation(m_program, "shininess")};
-  GLint KaLoc{glGetUniformLocation(m_program, "Ka")};
-  GLint KdLoc{glGetUniformLocation(m_program, "Kd")};
-  GLint KsLoc{glGetUniformLocation(m_program, "Ks")};
+  glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, &m_modelMatrix[0][0]);
 
+  auto modelViewMatrix{glm::mat3(viewMatrix * m_modelMatrix)};
+  glm::mat3 normalMatrix{glm::inverseTranspose(modelViewMatrix)};
+  glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, &normalMatrix[0][0]);
+  
+  glUniform1i(mappingModeLoc, m_mappingMode);
   glUniform1f(shininessLoc, m_shininess);
   glUniform4fv(KaLoc, 1, &m_Ka.x);
   glUniform4fv(KdLoc, 1, &m_Kd.x);
@@ -23,10 +37,10 @@ void Bola::paintGL() {
   m_model.render(m_trianglesToDraw);
 }
 
-void Bola::loadModel(std::string_view path) {
-  m_model.loadDiffuseTexture(getAssetsPath() + "maps/pattern.png");
-  m_model.loadNormalTexture(getAssetsPath() + "maps/pattern_normal.png");
-  m_model.loadFromFile(path);
+void Bola::loadModel(std::string path) {
+
+  m_model.loadDiffuseTexture(path + "maps/jabulani.jpg");
+  m_model.loadFromFile(path + "bola.obj");
   m_model.setupVAO(m_program);
   m_trianglesToDraw = m_model.getNumTriangles();
   

@@ -1,25 +1,22 @@
-#ifndef BOLA_HPP_
-#define BOLA_HPP_
+#ifndef Stadium_HPP_
+#define Stadium_HPP_
 
 #include "abcg.hpp"
 #include "model.hpp"
 
-class OpenGLWindow;
-
-class Bola{
+class Stadium{
 
     public:
-        void initializeGL(GLuint program, std::string path, glm::vec3 scale, glm::vec3 translation);
-        void paintGL(glm::mat4 viewMatrix, double deltaTime);
-        void terminateGL();
-        void loadModel(std::string path);
+       void initializeGL(GLuint program, std::string path, glm::vec3 scale, glm::vec3 translation);
+       void paintGL(glm::mat4 viewMatrix, double deltaTime);
+       void terminateGL();
+       void loadModel(std::string path);
 
         Model m_model;
         int m_trianglesToDraw{};
         float m_shininess{};
         GLuint m_program{};
-        int m_mappingMode = 2;
-        friend OpenGLWindow;
+        int m_mappingMode = 3;
 
         GLuint modelMatrixLoc;
         GLuint viewMatrixLoc;

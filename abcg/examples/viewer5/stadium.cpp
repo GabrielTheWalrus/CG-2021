@@ -1,9 +1,9 @@
-#include "bola.hpp"
+#include "stadium.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtx/hash.hpp>
 #include "abcg.hpp"
 
-void Bola::initializeGL(GLuint program, std::string assetsPath, glm::vec3 scale, glm::vec3 translation) {
+void Stadium::initializeGL(GLuint program, std::string assetsPath, glm::vec3 scale, glm::vec3 translation) {
 
   m_program = program;
 
@@ -12,6 +12,8 @@ void Bola::initializeGL(GLuint program, std::string assetsPath, glm::vec3 scale,
   normalMatrixLoc = glGetUniformLocation(m_program, "normalMatrix");
   shininessLoc = glGetUniformLocation(m_program, "shininess");
   mappingModeLoc = glGetUniformLocation(m_program, "mappingMode");
+
+  m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-90.0f), glm::vec3(1, 0, 0));
   
   KaLoc = glGetUniformLocation(m_program, "Ka");
   KdLoc = glGetUniformLocation(m_program, "Kd");
@@ -23,10 +25,10 @@ void Bola::initializeGL(GLuint program, std::string assetsPath, glm::vec3 scale,
   loadModel(assetsPath);
 }
 
-void Bola::paintGL(glm::mat4 viewMatrix, double deltaTime) {
+void Stadium::paintGL(glm::mat4 viewMatrix, double deltaTime) {
 
   //m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(0.0f, 0.0f, (0.25f * deltaTime)));
-  m_modelMatrix = glm::rotate(m_modelMatrix, (glm::radians(45.0f) * (float)deltaTime), glm::vec3(0, 1, 0));
+  //m_modelMatrix = glm::rotate(m_modelMatrix, (glm::radians(45.0f) * (float)deltaTime), glm::vec3(0, 1, 0));
   
   glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, &m_modelMatrix[0][0]);
 
@@ -48,10 +50,10 @@ void Bola::paintGL(glm::mat4 viewMatrix, double deltaTime) {
   m_model.render(m_trianglesToDraw);
 }
 
-void Bola::loadModel(std::string path) {
+void Stadium::loadModel(std::string path) {
 
-  m_model.loadDiffuseTexture(path + "maps/jabulani.jpg");
-  m_model.loadFromFile(path + "bola.obj");
+  m_model.loadDiffuseTexture(path + "wembley/wembley.jpg");
+  m_model.loadFromFile(path + "wembley/wembley.obj");
   m_model.setupVAO(m_program);
   m_trianglesToDraw = m_model.getNumTriangles();
   
@@ -62,13 +64,3 @@ void Bola::loadModel(std::string path) {
   m_Ks = m_model.getKs();
   m_shininess = m_model.getShininess();
 }
-/*
-glm::mat4 model{1.0f};
-  model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f));
-  model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
-  model = glm::scale(model, glm::vec3(0.5f));
-
-  glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, &model[0][0]);
-  glUniform4f(colorLoc, 1.0f, 1.0f, 1.0f, 1.0f);
-  glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
-  */

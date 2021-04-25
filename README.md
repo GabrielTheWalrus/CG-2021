@@ -8,9 +8,13 @@ A aplicação consiste na tentativa de criar um campo de futebol. Porém, com a 
 
 Além disso, também é possivel andar pelo cenário, de forma parecida com a do projeto LookAt, porém, o movimento "pan" é feito com o mouse (o que é uma tentativa de replicar as movimentações de um jogo de FPS).
 
-Houve também a tentativa de encaixar a cena dentro de um modelo do estado de Wembley. Entretanto, o objetivo inicial era tentar manter as proporções o mais próximo possível do real. Dessa forma, a textura do estádio de wembley ficava extremamente esticada e extremamente difícil de encaixar com o objeto do campo de futebol.
+Houve também a tentativa de encaixar a cena dentro de um modelo do estadio de Wembley. Entretanto, o objetivo inicial era tentar manter as proporções o mais próximo possível do real. Dessa forma, a textura do estádio de wembley ficava extremamente esticada e extremamente difícil de encaixar com o objeto do campo de futebol.
 
-Além disso, apesar de orientação do professor, não consegui consertar o "bug" no mapeamento de textura do retângulo do campo de futebol. que acabou repetindo um pedaço que não deveria nas bordas.
+Além disso, apesar de orientação do professor, não foi possível consertar o "bug" no mapeamento de textura do retângulo do campo de futebol. que acabou repetindo um pedaço que não deveria nas bordas.
+
+O projeto está estrutura de uma forma mais "orientada a objetos", o que facilita a criação de objetos na cena, inclusive podendo receber como parâmetros variáveis que podem configurar sua posição e rotação na cena.
+
+A camera "FPS" fica a uma altura de 1,8 no eixo y. Tentando simular uma pessoa de 180cm de altura, já que a proporção do campo de futebol é bem próxima de ser real (aproximadamente 100m x 70m).
 
 ## Movimentação
 
@@ -24,7 +28,9 @@ O código fonte está dentro da pasta Examples, dentro do diretório ABC, como "
 
 ## Link github pages
 
-https://gabrielthewalrus.github.io/CAMPODEFUTEBOL/
+https://gabrielthewalrus.github.io/CAMPODEFUTEBOL/index.html
+
+Obs.: esperar o FPS estabilizar para fazer movimentação do mouse (bug de câmera ficar girando até estabilizar FPS só acontece no build do WEBSM).
 
 # Projeto 2 - Computação Gráfica - Balada com carro
 

@@ -85,16 +85,19 @@ void main() {
   if (mappingMode == 0) {
     // Triplanar mapping
 
+    // A offset to center the texture around the origin
+    vec3 offset = vec3(-0.5, -0.5, -0.5);
+
     // Sample with x planar mapping
-    vec2 texCoord1 = PlanarMappingX(fragPObj);
+    vec2 texCoord1 = PlanarMappingX(fragPObj + offset);
     vec4 color1 = BlinnPhong(fragN, fragL, fragV, texCoord1);
 
     // Sample with y planar mapping
-    vec2 texCoord2 = PlanarMappingY(fragPObj);
+    vec2 texCoord2 = PlanarMappingY(fragPObj + offset);
     vec4 color2 = BlinnPhong(fragN, fragL, fragV, texCoord2);
 
     // Sample with z planar mapping
-    vec2 texCoord3 = PlanarMappingZ(fragPObj);
+    vec2 texCoord3 = PlanarMappingZ(fragPObj + offset);
     vec4 color3 = BlinnPhong(fragN, fragL, fragV, texCoord3);
 
     // Compute average based on normal
